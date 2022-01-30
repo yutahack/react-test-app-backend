@@ -14,7 +14,7 @@ client.connect((err) => {
     if (err) {
         console.error("PSQL Connection Error: ", err.stack);
     } else {
-        console.log("Success connec to PostgreSQL Server!");
+        console.log("Success connect to PostgreSQL Server!");
     }
 });
 
@@ -56,9 +56,10 @@ client.connect((err) => {
 // };
 
 const pgquery = async (text) => {
-    var result = await client.query(text);
     console.log("PSQL Query: ", text);
     try {
+        var result = await client.query(text);
+        console.log("PSQL Result: ", result);
         return result;
     } catch (err) {
         console.log("PSQL Error: ", err.stack);

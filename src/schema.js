@@ -12,6 +12,8 @@ const schema = buildSchema(`
 
 
     Login (user_id: String, user_pw: String): LoginResponse
+
+    GetProductList (offset: Int, limit: Int, conditions: GetProductListConditions!): GetProductListResponse
   },
 
   type Product {
@@ -35,6 +37,25 @@ const schema = buildSchema(`
     token: String
   }
 
+
+  input GetProductListConditions {
+    prd_type: String
+  }
+
+
+  type GetProductListResponse implements BaseResponse {
+    error: String,
+    result: [ProductInfo]
+  }
+  
+  type ProductInfo {
+    prd_code: String!,
+    prd_name: String,
+    prd_price: String,
+    prd_type: String,
+    insert_date: String,
+    insert_user: String
+  }
 
 
 

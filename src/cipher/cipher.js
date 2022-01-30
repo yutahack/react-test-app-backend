@@ -14,9 +14,6 @@ const verifyPass = async (passA, passB) => {
     return res;
 };
 
-let y = "yutaka3931";
-createHash(y).then(console.log);
-
 module.exports = {
     createHash,
     verifyPass,
