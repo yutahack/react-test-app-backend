@@ -25,6 +25,8 @@ const PG_SERVER_DB = process.env.PG_SERVER_DB;
 const PG_SERVER_USERNAME = process.env.PG_SERVER_USERNAME;
 const PG_SERVER_PW = process.env.PG_SERVER_PW;
 
+const JWT_SECRET_KEY = process.env.REACT_APP_JWT_KEY;
+
 module.exports = {
     GQL_API_BOOKS_NAME,
     GQL_API_BOOKS_PORT,
@@ -34,4 +36,6 @@ module.exports = {
     PG_SERVER_DB,
     PG_SERVER_USERNAME,
     PG_SERVER_PW,
+
+    JWT_SECRET_KEY,
 };

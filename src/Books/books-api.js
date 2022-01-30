@@ -3,10 +3,10 @@ const { graphqlHTTP } = require("express-graphql");
 const { buildSchema } = require("graphql");
 const cors = require("cors");
 const config = require("../config/consts");
+const pg = require("../pg/pg");
 
-require("dotenv").config();
-const port = config.API_BOOKS_PORT;
-const name = config.API_BOOKS_NAME;
+const port = config.GQL_API_BOOKS_PORT;
+const name = config.GQL_API_BOOKS_NAME;
 
 const bookSchema = buildSchema(`
   type Query {

@@ -1,4 +1,6 @@
 const { getTestUserName } = require("./test/test");
+const { login } = require("./login/login");
+const { getUserInfo } = require("./login/login-utils");
 
 const resolvers = {
     Hello: async () => {
@@ -24,6 +26,17 @@ const resolvers = {
         } else {
             return null;
         }
+    },
+
+    Login: async (args) => {
+        // var t = { error: null, result: { user_id: "none" } };
+
+        var res = null;
+        let arg = { user_id: args.user_id, user_pw: args.user_pw };
+        res = await login(arg);
+
+        console.log("res", res);
+        return res;
     },
 };
 
