@@ -1,4 +1,4 @@
-const { pgquery } = require("../pg/pg");
+const { pgquery, sendQuery } = require("../pg/pg");
 const strConverter = require("../converter/str-converter");
 
 const getProductList = async (offset, limit, conditions) => {
@@ -27,8 +27,11 @@ const getProductList = async (offset, limit, conditions) => {
         text: q,
     };
 
-    const result = await pgquery(v);
-    if (result.rows.length > 0) {
+    // const result = await pgquery(v);
+    const result = await sendQuery(v);
+    if (0 === result.rows.length) {
+        return { result: "1", values: "Product not found" };
+    } else {
         // Convert TIMESTAMP to String
         result.rows.map((v, i) => {
             var str = "";
@@ -37,8 +40,6 @@ const getProductList = async (offset, limit, conditions) => {
         });
 
         return { result: "0", values: result.rows };
-    } else {
-        return { result: "1", values: "Product not found" };
     }
 };
 

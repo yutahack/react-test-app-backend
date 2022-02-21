@@ -14,6 +14,8 @@ const schema = buildSchema(`
     Login (user_id: String, user_pw: String): LoginResponse
 
     GetProductList (offset: Int, limit: Int, conditions: GetProductListConditions!): GetProductListResponse
+
+    GetTrHistory (offset: Int, limit: Int, conditions: GetTrHistoryConditions!): GetTrHistoryResponse
   },
 
   type Product {
@@ -23,31 +25,34 @@ const schema = buildSchema(`
 
 
 
-  interface BaseResponse {
+  interface BaseMessage {
     error: String
   },
+  type BaseResponse implements BaseMessage {
+    error: String,
+    result: String
+  }
 
-  type LoginResponse implements BaseResponse {
+  
+  type LoginResponse implements BaseMessage {
     error: String,
     result: UserInfo
   },
-
   type UserInfo {
     user_id: String!,
     token: String
   }
 
 
+
+
   input GetProductListConditions {
     prd_type: String
   }
-
-
-  type GetProductListResponse implements BaseResponse {
+  type GetProductListResponse implements BaseMessage {
     error: String,
     result: [ProductInfo]
   }
-  
   type ProductInfo {
     prd_code: String!,
     prd_name: String,
@@ -58,7 +63,41 @@ const schema = buildSchema(`
   }
 
 
+  input GetTrHistoryConditions {
+    tr_no: String,
+    pay_method: String
+    del_yn: String
+  }
+  type GetTrHistoryResponse implements BaseMessage {
+    error: String,
+    result: [TrHistory]
+  }
+  type TrHistory {
+    seq: String!,
+    tr_no: String,
+    tr_date: String,
+    amount: String,
+    pay_method: String,
+    del_yn: String
+  }
+  
 
+
+
+
+  type mutation {
+    addTrHistory (input: TrHistoryAddRequest): BaseResponse
+  }
+
+
+  input TrHistoryAddRequest {
+    seq: String!,
+    tr_no: String!,
+    tr_date: String,
+    amount: String,
+    pay_method: String,
+    del_yn: String!
+  }
 
 
 `);

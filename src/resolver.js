@@ -2,6 +2,7 @@ const { getTestUserName } = require("./test/test");
 const { login } = require("./login/login");
 // const { getUserInfo } = require("./login/login-utils");
 const { products } = require("./products/products");
+const { tr_history } = require("./tr-history/tr-history");
 
 const resolvers = {
     Hello: async () => {
@@ -47,6 +48,20 @@ const resolvers = {
 
         console.log("res", res);
         return res;
+    },
+
+    GetTrHistory: async (args) => {
+        var res = null;
+        let arg = { field: "getTrHistory", offset: args.offset, limit: args.limit, conditions: args.conditions };
+        res = await tr_history(arg);
+
+        console.log("res", res);
+        return res;
+    },
+
+    AddTrHistory: async (args) => {
+        var res = null;
+        res = await tr;
     },
 };
 

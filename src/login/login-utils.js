@@ -1,4 +1,4 @@
-const { pgquery } = require("../pg/pg");
+const { pgquery, sendQuery } = require("../pg/pg");
 const { createHash, verifyPass } = require("../cipher/cipher");
 const { login } = require("./login");
 const jwt = require("jsonwebtoken");
@@ -34,7 +34,7 @@ const findByUserId = async (user_id) => {
         values: [user_id],
     };
 
-    const result = await pgquery(v);
+    const result = await sendQuery(v);
 
     if (result.rows.length > 0 && user_id == result.rows[0].user_id) {
         return { result: "0", user_id: result.rows[0].user_id };
@@ -55,7 +55,7 @@ const verifyPassword = async (user_id, user_pw) => {
         values: [user_id],
     };
 
-    const result = await pgquery(v);
+    const result = await sendQuery(v);
     if (result.rows.length > 0 && result.rows[0].user_pw) {
         const userPw = result.rows[0].user_pw;
         const verires = await verifyPass(user_pw, userPw);
@@ -88,7 +88,7 @@ const setLastLoginDate = async (user_id) => {
         text: q,
         values: [user_id],
     };
-    const result = await pgquery(v);
+    const result = await sendQuery(v);
 
     console.log("ins", result);
     if (result.result != 500) {
@@ -108,7 +108,7 @@ const clearLoginFailCnt = async (user_id) => {
         text: q,
         values: [user_id],
     };
-    const result = await pgquery(v);
+    const result = await sendQuery(v);
     if (result.result != 500) {
         console.log("clear_fail_cnt: ok");
         return { result: "0" };
@@ -128,7 +128,7 @@ const increaseLoginFailCnt = async (user_id) => {
         text: q,
         values: [user_id],
     };
-    const result = await pgquery(v);
+    const result = await sendQuery(v);
     if (result.result != 500) {
         console.log("inc_loginFailCnt: ok");
         return { result: "0" };
@@ -148,7 +148,7 @@ const setJwtToken = async (token, user_id) => {
         text: q,
         values: [token, user_id],
     };
-    const result = await pgquery(v);
+    const result = await sendQuery(v);
     if (result.result != 500) {
         console.log("setJwtToken: ok");
         return { result: "0" };
