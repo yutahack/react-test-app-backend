@@ -16,6 +16,7 @@ const schema = buildSchema(`
     GetProductList (offset: Int, limit: Int, conditions: GetProductListConditions!): GetProductListResponse
 
     GetTrHistory (offset: Int, limit: Int, conditions: GetTrHistoryConditions!): GetTrHistoryResponse
+    
   },
 
   type Product {
@@ -65,12 +66,16 @@ const schema = buildSchema(`
 
   input GetTrHistoryConditions {
     tr_no: String,
-    pay_method: String
+    pay_method: String,
     del_yn: String
   }
   type GetTrHistoryResponse implements BaseMessage {
     error: String,
-    result: [TrHistory]
+    result: TrHistoryResult
+  }
+  type TrHistoryResult {
+    count: Int,
+    rows: [TrHistory]
   }
   type TrHistory {
     seq: String!,
@@ -85,18 +90,15 @@ const schema = buildSchema(`
 
 
 
-  type mutation {
-    addTrHistory (input: TrHistoryAddRequest): BaseResponse
+  type Mutation {
+    InsertTrHistory (input: InsertTrHistoryRequest!): BaseResponse
   }
 
 
-  input TrHistoryAddRequest {
-    seq: String!,
+  input InsertTrHistoryRequest {
     tr_no: String!,
-    tr_date: String,
     amount: String,
-    pay_method: String,
-    del_yn: String!
+    pay_method: String
   }
 
 
