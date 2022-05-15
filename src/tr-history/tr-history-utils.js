@@ -1,5 +1,6 @@
-const { pgquery, sendQuery, beginTransaction, rollback } = require("../pg/pg");
+const { pgquery, sendQuery, beginTransaction, rollback, commit } = require("../pg/pg");
 const strConverter = require("../converter/str-converter");
+const validator = require("./tr-history-validator");
 
 const getTrHistory = async (offset, limit, conditions) => {
     console.log("!!", offset, limit, conditions);
@@ -40,7 +41,7 @@ const getTrHistory = async (offset, limit, conditions) => {
             del_yn
         from tb_tr_history
         where ${where}
-        order by seq asc
+        order by seq desc
         offset ${offset} limit ${limit}
     `;
     // const v = {
@@ -77,44 +78,50 @@ const getTrHistory = async (offset, limit, conditions) => {
 
 const insertTrHistory = async (data) => {
     // Validation
+    const v = validator.addTrHistoryVadliator(data);
+
+    // Get current Tr number
+    var tr_no = 0;
+    const dataQ = `
+        select tr_no from tb_tr_history tth order by seq desc limit 1;
+    `;
+    const dQres = await sendQuery({ text: dataQ });
+    if (dQres.rows.length > 0) {
+        console.log("Current tr_no:", dQres.rows[0].tr_no);
+        var tmp = Number(dQres.rows[0].tr_no) + 1;
+        if (NaN === tmp) {
+            tr_no = 0000;
+        } else {
+            tr_no = ("0000" + tmp).slice(-4);
+        }
+        console.log("Next tr_no: ", tr_no);
+    } else {
+        console.log("Not found tr no");
+        tr_no = 0000;
+    }
 
     // Make condition
-    var params = [];
-
-    var where = "1=1";
-    if ("" !== conditions.tr_no && conditions.tr_no) {
-        where += " and tr_no = " + `'${conditions.tr_no}'`;
-        params.push({ tr_no: "" });
-    }
-    if ("" !== conditions.pay_method && conditions.pay_method) {
-        where += " and pay_method = " + `'${conditions.pay_method}'`;
-        params.push({ pay_method: "" });
-    }
-    if ("" !== conditions.del_yn && conditions.del_yn) {
-        where += " and del_yn = " + `'${conditions.del_yn}'`;
-        params.push({ del_yn: "" });
-    }
-
     try {
         await beginTransaction();
-
-        const mainQuery = `INSERT INTO tb_user_info
+        const mainQuery = `INSERT INTO tb_tr_history
             (
                 seq,
-                tr_no, 
-                tr_date, 
-                amount, 
+                tr_no,
+                tr_date,
+                amount,
                 pay_method
             )
                 VALUES(nextval('seq_tb_tr_history'), $1, now(), $2, $3);
         `;
-
-        const param = [data.tr_no, data.amount, data.pay_method];
-        console.trace("insert query= ", mainQuery, param);
-        // sendQuery(mainQuery, param);
+        const param = [tr_no, v.amount, v.pay_method];
+        console.log("insert query= ", mainQuery, param);
+        sendQuery(mainQuery, param);
+        await commit();
+        return { result: "0", values: "Success" };
     } catch (err) {
+        console.log("Insert Error: ", err);
         await rollback();
-        throw err;
+        return { result: "1", values: "Error" };
     }
 };
 

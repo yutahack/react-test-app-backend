@@ -60,11 +60,11 @@ const resolvers = {
     },
 
     InsertTrHistory: async (args) => {
-        console.log("a");
         var res = null;
         let arg = { field: "insertTrHistory", input: args.input };
-
-        res = await tr;
+        res = await tr_history(arg);
+        console.log(res);
+        return res;
     },
 };
 

@@ -25,7 +25,7 @@ const tr_history = async (args) => {
             break;
 
         case "insertTrHistory":
-            const res = await trhUtils.insertTrHistory(args.data);
+            const res = await trhUtils.insertTrHistory(args.input);
             if ("0" === res.result) {
                 r.error = "600";
                 r.result = "success";

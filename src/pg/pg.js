@@ -134,19 +134,19 @@ const pgquery = async (text) => {
 };
 
 const IsolationLevel = Object.freeze({
-    ReadUncomitted: 1,
-    ReadComitted: 2,
+    ReadUncommitted: 1,
+    ReadCommitted: 2,
     RepeatableRead: 3,
     Serializable: 4,
 });
-const beginTransaction = async (isolationLevel = IsolationLevel.ReadComitted) => {
+const beginTransaction = async (isolationLevel = IsolationLevel.ReadCommitted) => {
     console.log("Begin transaction isolationLevel: ", isolationLevel);
     const client = await getConnection();
     switch (isolationLevel) {
-        case IsolationLevel.ReadUncomitted:
-            return client.query("begin transaction isolation level read uncomitted");
-        case IsolationLevel.ReadComitted:
-            return client.query("begin transaction isolation level read comitted");
+        case IsolationLevel.ReadUncommitted:
+            return client.query("begin transaction isolation level read uncommitted");
+        case IsolationLevel.ReadCommitted:
+            return client.query("begin transaction isolation level read committed");
         case IsolationLevel.RepeatableRead:
             return client.query("begin transaction isolation level repeatable read");
         case IsolationLevel.Serializable:

@@ -98,7 +98,7 @@ const schema = buildSchema(`
   input InsertTrHistoryRequest {
     tr_no: String!,
     amount: String,
-    pay_method: String
+    pay_method: String,
   }
 
 
