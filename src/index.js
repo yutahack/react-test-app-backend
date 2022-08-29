@@ -7,8 +7,9 @@ const schema = require("./schema");
 const resolver = require("./resolver");
 const pg = require("./pg/pg");
 
-const port = config.GQL_API_BOOKS_PORT;
-const name = config.GQL_API_BOOKS_NAME;
+// const port = config.GQL_API_BOOKS_PORT;
+// const name = config.GQL_API_BOOKS_NAME;
+const port = 4000;
 
 const books = [
     {
@@ -71,4 +72,4 @@ app.use(
     })
 );
 
-app.listen(port, () => console.log("GraphQL Server is running on localhost:" + port + name));
+app.listen(port, () => console.log("GraphQL Server is running on localhost:" + port));
