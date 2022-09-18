@@ -1,0 +1,14 @@
+version: "3.7"
+
+services:
+    app:
+        # Build하려는 Dockerfile의 위치
+        build: .
+
+        image: webkiosk-backend-image
+        ports:
+            - 4651:4000
+        tty: true
+        volumes:
+            # バインドマウント
+            - ./app:/app

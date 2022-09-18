@@ -1,6 +1,7 @@
 //
 // Const setting values from dotenv
 //
+require("dotenv").config({ path: `${__dirname}/../.env` });
 
 let path;
 switch (process.env.NODE_ENV) {
@@ -8,12 +9,12 @@ switch (process.env.NODE_ENV) {
         path = `${__dirname}/../../.env.prod`;
         break;
     case "dev":
-        path = `${__dirname}/../../.env.dev`;
+        path = `${__dirname}/../.env.dev`;
         break;
     default:
-        path = `${__dirname}/../../.env.dev`;
+        path = `${__dirname}/../.env.dev`;
 }
-
+console.log("### PATH: ", path);
 const dotenv = require("dotenv").config({ path: path });
 
 const GQL_API_BOOKS_NAME = process.env.GQL_API_BOOKS_NAME;
