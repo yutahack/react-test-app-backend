@@ -115,7 +115,7 @@ const insertTrHistory = async (data) => {
         `;
         const param = [tr_no, v.amount, v.pay_method];
         console.log("insert query= ", mainQuery, param);
-        sendQuery(mainQuery, param);
+        const mRes = await sendQuery(mainQuery, param);
         await commit();
         return { result: "0", values: "Success" };
     } catch (err) {

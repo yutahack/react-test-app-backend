@@ -33,7 +33,7 @@ const addTrHistoryVadliator = (data) => {
 
         pay_method: vs.string({
             // 文字列型
-            only: ["card", "pay"],
+            // only: ["card", "pay"],
         }),
     };
 
