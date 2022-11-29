@@ -1,4 +1,4 @@
-const { Client, pg } = require("pg");
+const { Client, pg, Pool } = require("pg");
 const Query = require("pg").Query;
 const config = require("../config/consts");
 
@@ -13,7 +13,8 @@ var dbConfig = {
     password: config.PG_SERVER_PW,
     port: config.PG_SERVER_PORT,
 };
-var client = new Client(dbConfig);
+// var client = new Client(dbConfig);
+var client = new Pool(dbConfig);
 
 const onConnectionError = (err) => {
     console.error("Database error: ", err);
